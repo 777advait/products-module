@@ -21,7 +21,7 @@ function ProductItem(props: {
           className="rounded-md"
         />
       </div>
-      <div className="w-1/2 space-y-2">
+      <div className="w-1/2 space-y-2 py-4">
         <Link
           href={`/product/${props.id}`}
           className="text-lg font-semibold underline-offset-4 hover:underline"
