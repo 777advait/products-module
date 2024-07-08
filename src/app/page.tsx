@@ -15,7 +15,7 @@ export default async function HomePage() {
   return (
     <main className="">
       <Container>
-        <Tabs defaultValue="list" className="space-y-8">
+        <Tabs defaultValue="grid" className="space-y-8">
           <TabsList>
             <TabsTrigger value="grid">Grid View</TabsTrigger>
             <TabsTrigger value="list">List View</TabsTrigger>
