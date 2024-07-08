@@ -10,12 +10,12 @@ function ProductCard(props: {
   description: string;
 }) {
   return (
-    <div className="rounded-md border border-gray-100 bg-gray-400 bg-opacity-10 bg-clip-padding p-4 backdrop-blur-md backdrop-filter ">
+    <div className="rounded-md border border-gray-100 bg-gray-400 bg-opacity-10 bg-clip-padding p-4 backdrop-blur-md backdrop-filter">
       <div className="space-y-4">
         <div className="flex flex-col items-center justify-center">
           <Image
             src={props.image}
-            alt="Unisex Organic T-Shirt | Econscious EC1000"
+            alt={props.title}
             width={200}
             height={200}
             className="rounded-md"
@@ -28,7 +28,7 @@ function ProductCard(props: {
           >
             {props.title}
           </Link>
-          <p className="text-muted-foreground truncate text-ellipsis text-sm">
+          <p className="truncate text-sm text-muted-foreground">
             {props.description}
           </p>
         </div>
@@ -38,16 +38,11 @@ function ProductCard(props: {
 }
 
 export default async function ProductsGrid() {
-  const products: {
-    id: number;
-    title: string;
-    image: string;
-    description: string;
-  }[] = await getProducts();
+  const products = await getProducts();
 
   if (!products) {
     return (
-      <p className="text-muted-foreground text-center font-medium">
+      <p className="text-center font-medium text-muted-foreground">
         Failed to fetch products
       </p>
     );
