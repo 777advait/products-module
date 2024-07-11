@@ -87,14 +87,20 @@ export default async function Page({ params }: { params: { id: string } }) {
               currency={product.product.currency}
             />
             <div className="flex items-center gap-4 px-2">
-              <Button size="sm">
+              <Link
+                href={{ pathname: "/checkout", query: { productId: params.id } }}
+                className={`${buttonVariants({ size: "sm" })}`}
+              >
                 <ShoppingBagIcon className="mr-1.5 h-3.5 w-3.5" />
                 Buy Now
-              </Button>
-              <Button size="sm" variant="outline">
+              </Link>
+              <Link
+                href={`/cart`}
+                className={`${buttonVariants({ size: "sm", variant: "outline" })}`}
+              >
                 <ShoppingCartIcon className="mr-1.5 h-3.5 w-3.5" />
                 Add to Cart
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

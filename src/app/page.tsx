@@ -1,17 +1,35 @@
 import Container from "@/components/Container";
-import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductsGrid from "@/components/Listing/ProductsGrid";
 import ProductsList from "@/components/Listing/ProductsList";
-
-async function getProducts() {
-  const response = await fetch("https://api.printful.com/products");
-  const products = await response.json();
-  return products.code !== 200 ? null : products.result;
-}
+import { auth, signIn } from "@/server/auth";
+import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
-  const products = JSON.stringify((await getProducts()).result, null, 2);
+  const session = await auth();
+
+  if (!session?.user) {
+    return (
+      <main className="">
+        <Container>
+          <div className="flex flex-col items-center gap-4">
+            <h1 className="text-center text-3xl font-medium">
+              Log in to proceed
+            </h1>
+            <form
+              action={async () => {
+                "use server";
+                await signIn("github");
+              }}
+            >
+              <Button>Sign in with GitHub</Button>
+            </form>
+          </div>
+        </Container>
+      </main>
+    );
+  }
+
   return (
     <main className="">
       <Container>
