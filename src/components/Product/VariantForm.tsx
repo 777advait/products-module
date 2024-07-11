@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import {
   Select,
   SelectContent,
@@ -8,6 +8,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const schema = z.object({
+  variant: z.string(),
+});
 
 export default function VariantForm({
   variant_count,
@@ -23,39 +38,55 @@ export default function VariantForm({
     price: string;
   }[];
 }) {
-  const [variant, setVariant] = React.useState<number | null>(null);
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+  });
+
+  async function onSubmit(data: z.infer<typeof schema>) {
+    console.log(data);
+  }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-4 px-2">
-        <h2 className="font-medium">Available variants: {variant_count}</h2>
-        {variant_count !== 0 && (
-          <div className="">
-            <Select onValueChange={(value) => setVariant(parseInt(value))}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select your variant" />
-              </SelectTrigger>
-              <SelectContent>
-                {variants.map((variant) => (
-                  <SelectItem key={variant.id} value={String(variant.id)}>
-                    {variant.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
-      </div>
-      <div className="px-2">
-        <h2 className="text-lg font-semibold">
-          Price:{" "}
-          <span className="font-normal">
-            {variant === null
-              ? "Select a variant"
-              : currency + " " + variants.find((v) => v.id === variant)?.price}
-          </span>
-        </h2>
-      </div>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="px-2">
+        <FormField
+          control={form.control}
+          name="variant"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Available variants: {variant_count}</FormLabel>
+
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your variant" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {variants.map((variant) => (
+                    <SelectItem key={variant.id} value={String(variant.id)}>
+                      {variant.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="px-2">
+                <h2 className="text-lg font-semibold">
+                  Price:{" "}
+                  <span className="font-normal">
+                    {field.value === undefined
+                      ? "Select a variant"
+                      : currency +
+                        " " +
+                        variants.find((v) => v.id === parseInt(field.value))
+                          ?.price}
+                  </span>
+                </h2>
+              </div>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   );
 }
