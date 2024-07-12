@@ -44,6 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     };
     variants: {
       id: number;
+      product_id: number;
       name: string;
       image: string;
       price: string;
@@ -86,22 +87,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               variant_count={product.product.variant_count}
               currency={product.product.currency}
             />
-            <div className="flex items-center gap-4 px-2">
-              <Link
-                href={{ pathname: "/checkout", query: { productId: params.id } }}
-                className={`${buttonVariants({ size: "sm" })}`}
-              >
-                <ShoppingBagIcon className="mr-1.5 h-3.5 w-3.5" />
-                Buy Now
-              </Link>
-              <Link
-                href={`/cart`}
-                className={`${buttonVariants({ size: "sm", variant: "outline" })}`}
-              >
-                <ShoppingCartIcon className="mr-1.5 h-3.5 w-3.5" />
-                Add to Cart
-              </Link>
-            </div>
+            
           </div>
         </div>
         <div className="space-y-4">

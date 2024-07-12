@@ -10,7 +10,7 @@ export default auth((req) => {
   );
 
   if (!req.auth && isPrivatePage) {
-    const newUrl = new URL("/login", req.nextUrl.origin);
+    const newUrl = new URL("/", req.nextUrl.origin);
     return Response.redirect(newUrl);
   }
 });

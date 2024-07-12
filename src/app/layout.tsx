@@ -1,3 +1,4 @@
+import Cart from "@/components/Cart";
 import Navbar from "@/components/Navbar";
 import "@/styles/globals.css";
 
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.className}`}>
       <body>
         <Navbar />
+        <Cart />
         {children}
       </body>
     </html>

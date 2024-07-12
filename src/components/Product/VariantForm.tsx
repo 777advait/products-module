@@ -19,9 +19,12 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ShoppingCartIcon } from "lucide-react";
+import { Button } from "../ui/button";
+import { addToCart } from "@/server/actions/add-to-cart";
 
 const schema = z.object({
-  variant: z.string(),
+  variantId: z.string(),
 });
 
 export default function VariantForm({
@@ -33,6 +36,7 @@ export default function VariantForm({
   currency: string;
   variants: {
     id: number;
+    product_id: number;
     name: string;
     image: string;
     price: string;
@@ -43,17 +47,31 @@ export default function VariantForm({
   });
 
   async function onSubmit(data: z.infer<typeof schema>) {
-    console.log(data);
+    const variant = variants.find((v) => v.id === parseInt(data.variantId));
+
+    if (!variant) return null;
+
+    const res = await addToCart({
+      productId: variant.product_id,
+      variantId: variant.id,
+      price: variant.price,
+    });
+
+    if (res.error) {
+      console.log(res.error);
+    }
+
+    console.log(res.success);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="px-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-2">
         <FormField
           control={form.control}
-          name="variant"
+          name="variantId"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-2">
               <FormLabel>Available variants: {variant_count}</FormLabel>
 
               <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -70,7 +88,8 @@ export default function VariantForm({
                   ))}
                 </SelectContent>
               </Select>
-              <div className="px-2">
+              <FormMessage />
+              <div className="">
                 <h2 className="text-lg font-semibold">
                   Price:{" "}
                   <span className="font-normal">
@@ -86,6 +105,12 @@ export default function VariantForm({
             </FormItem>
           )}
         />
+        <div className="flex items-center gap-4">
+          <Button size="sm" variant="outline">
+            <ShoppingCartIcon className="mr-1.5 h-3.5 w-3.5" />
+            Add to Cart
+          </Button>
+        </div>
       </form>
     </Form>
   );
