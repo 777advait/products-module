@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { auth } from "../auth";
 import { db } from "../db";
 import { getCart } from "../db/queries";
@@ -28,6 +29,7 @@ export async function addToCart({
       variant_id: variantId,
       price: price,
     });
+
     return { success: "Added to cart" };
   } catch (error) {
     console.log(error);

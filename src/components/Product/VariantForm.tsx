@@ -22,6 +22,7 @@ import { z } from "zod";
 import { ShoppingCartIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { addToCart } from "@/server/actions/add-to-cart";
+import { useToast } from "../ui/use-toast";
 
 const schema = z.object({
   variantId: z.string(),
@@ -45,6 +46,7 @@ export default function VariantForm({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
+  const {toast} = useToast();
 
   async function onSubmit(data: z.infer<typeof schema>) {
     const variant = variants.find((v) => v.id === parseInt(data.variantId));
@@ -58,10 +60,16 @@ export default function VariantForm({
     });
 
     if (res.error) {
-      console.log(res.error);
+      toast({
+        title: res.error,
+        variant: "destructive",
+      });
+      return;
     }
 
-    console.log(res.success);
+    toast({
+      title: res.success,
+    });
   }
 
   return (
@@ -106,7 +114,11 @@ export default function VariantForm({
           )}
         />
         <div className="flex items-center gap-4">
-          <Button size="sm" variant="outline">
+          <Button
+            disabled={form.formState.isSubmitting}
+            size="sm"
+            variant="outline"
+          >
             <ShoppingCartIcon className="mr-1.5 h-3.5 w-3.5" />
             Add to Cart
           </Button>

@@ -1,5 +1,6 @@
 import Cart from "@/components/Cart";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -20,6 +21,7 @@ export default function RootLayout({
         <Navbar />
         <Cart />
         {children}
+        <Toaster />
       </body>
     </html>
   );
