@@ -48,7 +48,7 @@ export default function VariantForm({
     resolver: zodResolver(schema),
   });
   const { toast } = useToast();
-  const router = useRouter()
+  const router = useRouter();
 
   async function onSubmit(
     data: z.infer<typeof schema>,
@@ -75,6 +75,7 @@ export default function VariantForm({
     const submitter = event.nativeEvent.submitter as HTMLButtonElement;
     if (submitter.getAttribute("data-action") === "buy-now") {
       router.push("/checkout");
+      return;
     }
 
     toast({

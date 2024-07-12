@@ -5,29 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1720709187501,
-      "tag": "0000_messy_jamie_braddock",
+      "when": 1720801777308,
+      "tag": "0000_typical_mikhail_rasputin",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1720762397228,
-      "tag": "0001_square_human_torch",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1720765542204,
-      "tag": "0002_dazzling_mad_thinker",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1720767003152,
-      "tag": "0003_calm_blonde_phantom",
+      "when": 1720803066644,
+      "tag": "0001_cloudy_xorn",
       "breakpoints": true
     }
   ]
