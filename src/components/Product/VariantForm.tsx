@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use } from "react";
+import React from "react";
 import {
   Select,
   SelectContent,
@@ -19,10 +19,11 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ShoppingCartIcon } from "lucide-react";
+import { ShoppingBagIcon, ShoppingCartIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { addToCart } from "@/server/actions/add-to-cart";
 import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   variantId: z.string(),
@@ -46,9 +47,13 @@ export default function VariantForm({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
-  const {toast} = useToast();
+  const { toast } = useToast();
+  const router = useRouter()
 
-  async function onSubmit(data: z.infer<typeof schema>) {
+  async function onSubmit(
+    data: z.infer<typeof schema>,
+    event: React.BaseSyntheticEvent,
+  ) {
     const variant = variants.find((v) => v.id === parseInt(data.variantId));
 
     if (!variant) return null;
@@ -65,6 +70,11 @@ export default function VariantForm({
         variant: "destructive",
       });
       return;
+    }
+
+    const submitter = event.nativeEvent.submitter as HTMLButtonElement;
+    if (submitter.getAttribute("data-action") === "buy-now") {
+      router.push("/checkout");
     }
 
     toast({
@@ -115,9 +125,18 @@ export default function VariantForm({
         />
         <div className="flex items-center gap-4">
           <Button
+            data-action="buy-now"
+            disabled={form.formState.isSubmitting}
+            size="sm"
+          >
+            <ShoppingBagIcon className="mr-1.5 h-3.5 w-3.5" />
+            Buy Now
+          </Button>
+          <Button
             disabled={form.formState.isSubmitting}
             size="sm"
             variant="outline"
+            data-action="add-to-cart"
           >
             <ShoppingCartIcon className="mr-1.5 h-3.5 w-3.5" />
             Add to Cart

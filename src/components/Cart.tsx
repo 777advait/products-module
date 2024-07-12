@@ -58,7 +58,7 @@ export default async function Cart() {
             )}
           </div>
           <SheetFooter>
-            <Button size="sm">
+            <Button disabled={cartItems.length === 0} size="sm">
               <ShoppingCartIcon className="mr-1.5 h-3.5 w-3.5" />
               Checkout
             </Button>
