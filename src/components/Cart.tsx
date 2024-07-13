@@ -1,7 +1,7 @@
 import React from "react";
 import { ShoppingCartIcon } from "lucide-react";
 import { auth } from "@/server/auth";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { getCartItems } from "@/server/db/queries";
 import { getProductById } from "@/lib/get-products";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -58,10 +59,14 @@ export default async function Cart() {
             )}
           </div>
           <SheetFooter>
-            <Button disabled={cartItems.length === 0} size="sm">
+            <Link
+              aria-disabled={cartItems.length === 0}
+              className={`${buttonVariants({ size: "sm" })}`}
+              href="/checkout"
+            >
               <ShoppingCartIcon className="mr-1.5 h-3.5 w-3.5" />
               Checkout
-            </Button>
+            </Link>
           </SheetFooter>
         </SheetContent>
       </Sheet>
