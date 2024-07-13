@@ -14,6 +14,11 @@ import {
 import { getCartItems } from "@/server/db/queries";
 import { getProductById } from "@/lib/get-products";
 import Link from "next/link";
+import { TrashIcon } from "lucide-react";
+import { db } from "@/server/db";
+import { cartProducts } from "@/server/db/schemas";
+import { eq } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -46,11 +51,33 @@ export default async function Cart() {
                 );
 
                 return (
-                  <div className="border-b pb-4">
+                  <div className="space-y-2 border-b pb-4">
                     <h1 className="font-semibold">{product.name}</h1>
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Price: {product.price}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Price: {product.price}
+                      </p>
+                      <form
+                        action={async () => {
+                          "use server";
+
+                          await db
+                            .delete(cartProducts)
+                            .where(eq(cartProducts.id, item.id));
+
+                          revalidateTag("Sheet");
+                        }}
+                      >
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          className="h-7 gap-1 text-sm"
+                        >
+                          <TrashIcon className="h-3.5 w-3.5" />
+                          Remove
+                        </Button>
+                      </form>
+                    </div>
                   </div>
                 );
               })
